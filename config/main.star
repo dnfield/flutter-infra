@@ -173,7 +173,6 @@ def prod_builder(name, console_view_name, category, short_name, recipe, os, prop
     service_account = 'flutter-prod-builder@chops-service-accounts.iam.gserviceaccount.com',
     execution_timeout = 3 * time.hour,
     dimensions = dimensions,
-    swarming_tags = ['vpython:native-python-wrapper'],
     build_numbers = True,
     notifies = [
       luci.notifier(
@@ -209,39 +208,39 @@ def mac_builder(properties = {}, caches=None, category = 'Mac', **kwargs):
     },
     properties
   )
-  if caches == None:
-    caches = []
-  caches.append(swarming.cache('osx_sdk'))
+  mac_caches = [swarming.cache('osx_sdk')]
+  if caches != None:
+    mac_caches.extend(caches)
   return short_name_builder(
     os = 'Mac-10.14',
     properties = properties,
-    caches = caches,
+    caches = mac_caches,
     category = category,
     **kwargs
   )
 
 def linux_builder(properties = {}, caches=None, cores='8', category='Linux', **kwargs):
-  if caches == None:
-    caches = []
-  caches.append(swarming.cache(name = 'flutter_openjdk_install', path = 'java'))
+  linux_caches = [swarming.cache(name = 'flutter_openjdk_install', path = 'java')]
+  if caches != None:
+    linux_caches.extend(caches)
   return short_name_builder(
     os = 'Ubuntu-16.04',
     cores = cores,
     properties = properties,
-    caches = caches,
+    caches = linux_caches,
     category = category,
     **kwargs
   )
 
 def windows_builder(properties = {}, caches=None, cores='8', category = 'Windows', **kwargs):
-  if caches == None:
-    caches = []
-  caches.append(swarming.cache(name = 'flutter_openjdk_install', path = 'java'))
+  windows_caches = [swarming.cache(name = 'flutter_openjdk_install', path = 'java')]
+  if caches != None:
+    windows_caches.extend(caches)
   return short_name_builder(
     os = 'Windows-10',
     cores = cores,
     properties = properties,
-    caches = caches,
+    caches = windows_caches,
     category = category,
     **kwargs
   )
