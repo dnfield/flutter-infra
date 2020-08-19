@@ -157,6 +157,7 @@ def engine_prod_config(platform_args, branch, version, ref, fuchsia_ctl_version)
     # Defines triggering policy
     if branch == "master":
         triggering_policy = scheduler.greedy_batching(
+            max_batch_size = 1,
             max_concurrent_invocations = 6,
         )
     else:
